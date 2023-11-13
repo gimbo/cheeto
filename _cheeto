@@ -1,0 +1,39 @@
+#compdef cheeto
+
+local -a _cheeto_cmds opt_args
+_cheeto_cmds=(
+    'ls:List cheatsheets'
+    'show:Show some cheatsheet'
+)
+
+__ls() {
+    _arguments \
+        '(-table -json)--plain[Plain output.]' \
+        '(-plain -json)--table[Tabular output.]' \
+        '(-plain -table)--json[JSON output.]'
+}
+
+__show() {
+    _arguments \
+    "::" \
+    ":sheet_name:__sheetnames"
+}
+
+__sheetnames() {
+  compadd $(cheeto ls)
+}
+
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "cheeto command" _cheeto_cmds
+  return
+fi
+
+local -a _command_args
+case "$words[1]" in
+  ls)
+    __ls ;;
+  show)
+    __show;;
+esac
