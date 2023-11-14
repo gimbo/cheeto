@@ -6,12 +6,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cheeto"
 description = "Cheat sheet utility"
-license = "MIT"
-authors = [{name = "Andy Gimblett", email = "andy@barefootcode.com"}]
 readme = "README.md"
-homepage = "https://github.com/gimbo/cheeto"
-repository = "https://github.com/gimbo/cheeto"
-documentation = "https://github.com/gimbo/cheeto"
+requires-python = ">= 3.11, < 4"
+license = {file = "LICENSE"}
+authors = [{name = "Andy Gimblett", email = "andy@barefootcode.com"}]
 keywords = [
     "cheat sheet",
     "cheatsheet",
@@ -24,14 +22,13 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python",
     "Programming Language :: Unix Shell",
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-requires-python = ">= 3.11, < 4"
+
 dependencies = [
     "argparse-formatter >= 1.4, < 2",
     "humanize >= 4.8.0, < 4.9",
@@ -60,6 +57,11 @@ dev = [
 
 [project.scripts]
 cheeto = "cheeto.scripts.cheeto:main"
+
+[project.urls]
+homepage = "https://github.com/gimbo/cheeto"
+repository = "https://github.com/gimbo/cheeto"
+documentation = "https://github.com/gimbo/cheeto"
 
 
 [tool.coverage.run]

@@ -6,6 +6,14 @@ from typing import Protocol
 import platformdirs
 
 
+def walk(path: Path):
+    for child in path.iterdir():
+        if child.is_dir():
+            yield from walk(child)
+        else:
+            yield child
+
+
 def twiddles(path: Path):
     """Inverse of path.expanduser() for current user: replace home path with ~
 

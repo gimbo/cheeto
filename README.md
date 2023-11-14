@@ -27,7 +27,7 @@ To install zsh completions for the `cheeto` command, install this repo as a zsh 
 
 ### Cheat sheet location
 
-`cheeto` looks for cheat sheets in a single (flat) folder; that is specified as follows:
+`cheeto` looks for cheat sheets (which are just files whose name contains the text `cheatsheet`) in a single folder and its children, recursively; that  root is specified as follows:
 
 * By the `--path`/`-p` command line argument if set.
 * Otherwise, by the `CHEETO_DATA_PATH` env var if set (here, `~` will be expanded).
@@ -58,7 +58,7 @@ cheeto ls [--plain | --table | --json]
 * `--table` — a table containing more detailed information on each sheet.
 * `--json` — sheet detail (like `--table`) but in JSON format.
 
-N.b.: the **name** of each cheat sheet is its filename without suffix; e.g. a cheatsheet in the file `foo.md` will have name `foo`.  It's an error to have two sheets with the same name (e.g. `foo.md` and `foo.txt` or indeed just `foo`).
+N.b.: the **name** of each cheat sheet is its filename without suffix and without `.cheatsheet` if that's the last text before the suffix; e.g. a cheatsheet in the file `foo.cheatsheet.md` will have name `foo`.  It's an error to have two sheets with the same name (e.g. `foo.cheatsheet.md` and `foo.cheatsheet.txt`, say).
 
 
 ### Show specified sheet:
@@ -67,7 +67,7 @@ N.b.: the **name** of each cheat sheet is its filename without suffix; e.g. a ch
 cheeto show <sheet_name>
 ```
 
-This loads the sheet (specified using its _name_ - so no file suffix) and writes its contents to the terminal; `cheeto` will render the sheet using `mdcat` if it thinks it's in markdown format (either because its filename ends in `.md` or its first line looks like `# <blah` formatted a markdown level-1 header)
+This loads the sheet (specified using its _name_ - so no file suffix / `.cheatsheet` necessary) and writes its contents to the terminal; `cheeto` will render the sheet using `mdcat` if it thinks it's in markdown format (either because its filename ends in `.md` or its first line looks like a markdown level-1 header in `#` format — e.g. `# <blah`)
 
 
 ## Background / inspiration

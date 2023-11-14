@@ -13,7 +13,7 @@ from argparse_formatter import FlexiFormatter
 from cheeto import __version__
 from cheeto.sheet import SheetName
 
-from .path import twiddles, user_data_path
+from .pathlib import twiddles, user_data_path
 
 
 DATA_PATH_ENV_VAR = "CHEETO_DATA_PATH"

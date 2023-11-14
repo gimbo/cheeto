@@ -11,13 +11,8 @@ from rich import box, pretty, print, traceback
 from rich.logging import RichHandler
 from rich.table import Table
 
-from cheeto.sheet import (
-    Sheet,
-    SheetName,
-    SheetNameClashError,
-    SheetNotFoundError,
-    Sheets,
-)
+from cheeto.sheet import SheetName, SheetNameClashError, SheetNotFoundError
+from cheeto.sheets import Sheets
 from cheeto.utils.argparse import ArgumentParser, unpack_args
 from cheeto.utils.markdown import render_markdown
 
@@ -98,7 +93,7 @@ def jsonify_sheets(sheets: Sheets) -> str:
 @unpack_args
 def cmd_show_sheet(data_path: Path, sheet_name: SheetName):
     try:
-        sheet = Sheet.named_sheet_at(sheet_name, data_path)
+        sheet = Sheets.named_sheet_at(sheet_name, data_path)
     except SheetNotFoundError:
         print(f"Can't find sheet '{sheet_name}' at path [{data_path}]")
         return

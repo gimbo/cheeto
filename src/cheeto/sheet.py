@@ -1,9 +1,9 @@
-from collections.abc import Mapping
+from collections.abc import Iterator
 from pathlib import Path
 from typing import NamedTuple, NewType, Self
 
 from cheeto.utils.error import CheetoError
-from cheeto.utils.path import twiddles
+from cheeto.utils.pathlib import twiddles, walk
 
 
 SheetName = NewType("SheetName", str)
@@ -24,20 +24,16 @@ class SheetNotFoundError(SheetError):
 class Sheet(NamedTuple):
     path: Path
 
-    @classmethod
-    def named_sheet_at(cls, sheet_name: SheetName, sheets_path: Path) -> Self:
-        try:
-            return Sheets.at(sheets_path)[sheet_name]
-        except KeyError:
-            raise SheetNotFoundError((sheet_name, sheets_path))
-
     @property
     def filename(self) -> str:
         return self.path.name
 
     @property
     def name(self) -> SheetName:
-        return SheetName(self.path.stem)
+        name = self.path.stem
+        if name.endswith(".cheatsheet"):
+            name = name[: -len(".cheatsheet")]
+        return SheetName(name)
 
     @property
     def text(self) -> str:
@@ -70,27 +66,8 @@ class Sheet(NamedTuple):
             )
         )
 
-
-class Sheets(Mapping):
-    def __init__(self, sheets: dict[SheetName, Sheet], *args, **kwargs):
-        self._sheets = sheets
-        super().__init__(*args, **kwargs)
-
     @classmethod
-    def at(cls, sheets_path: Path) -> Self:
-        sheets: dict[SheetName, Sheet] = {}
-        for path in sorted(sheets_path.expanduser().iterdir()):
-            sheet = Sheet(twiddles(path))
-            if sheet.name in sheets:
-                raise SheetNameClashError(sheets[sheet.name].path, twiddles(path))
-            sheets[sheet.name] = sheet
-        return cls(sheets)
-
-    def __getitem__(self, key):
-        return self._sheets.__getitem__(key)
-
-    def __iter__(self):
-        return self._sheets.__iter__()
-
-    def __len__(self):
-        return self._sheets.__len__()
+    def find_cheatsheets_at(cls, path: Path) -> Iterator[Self]:
+        for child in walk(path.expanduser()):
+            if "cheatsheet" in child.name.split("."):
+                yield cls(twiddles(child))
