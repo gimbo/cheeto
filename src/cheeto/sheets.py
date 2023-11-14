@@ -1,4 +1,5 @@
 from collections.abc import Iterator
+from operator import attrgetter
 from pathlib import Path
 from typing import Mapping, Self
 
@@ -13,7 +14,7 @@ class Sheets(Mapping):
     @classmethod
     def of(cls, sheets: Iterator[Sheet]) -> Self:
         _sheets: dict[SheetName, Sheet] = {}
-        for sheet in sheets:
+        for sheet in sorted(sheets, key=attrgetter("name")):
             if sheet.name in _sheets:
                 raise SheetNameClashError(
                     sheet.name,
