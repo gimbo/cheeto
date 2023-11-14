@@ -30,10 +30,13 @@ class Sheet(NamedTuple):
 
     @property
     def name(self) -> SheetName:
-        name = self.path.stem
-        if name.endswith(".cheatsheet"):
-            name = name[: -len(".cheatsheet")]
-        return SheetName(name)
+        return self.normalize_sheet_name(self.path.stem)
+
+    @staticmethod
+    def normalize_sheet_name(name: str) -> SheetName:
+        return SheetName(
+            name[: -len(".cheatsheet")] if name.endswith(".cheatsheet") else name
+        )
 
     @property
     def text(self) -> str:

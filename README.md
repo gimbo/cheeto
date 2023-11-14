@@ -27,7 +27,7 @@ To install zsh completions for the `cheeto` command, install this repo as a zsh 
 
 ### Cheat sheet location
 
-`cheeto` looks for cheat sheets (which are just files whose name contains the text `cheatsheet`) in a single folder and its children, recursively; that  root is specified as follows:
+`cheeto` looks for cheat sheets (which are just files whose name contains the text `cheatsheet`) in a single folder and its children, recursively; that root is specified as follows:
 
 * By the `--path`/`-p` command line argument if set.
 * Otherwise, by the `CHEETO_DATA_PATH` env var if set (here, `~` will be expanded).
@@ -58,7 +58,7 @@ cheeto ls [--plain | --table | --json]
 * `--table` — a table containing more detailed information on each sheet.
 * `--json` — sheet detail (like `--table`) but in JSON format.
 
-N.b.: the **name** of each cheat sheet is its filename without suffix and without `.cheatsheet` if that's the last text before the suffix; e.g. a cheatsheet in the file `foo.cheatsheet.md` will have name `foo`.  It's an error to have two sheets with the same name (e.g. `foo.cheatsheet.md` and `foo.cheatsheet.txt`, say).
+N.b.: in general the **name** of each cheat sheet is its filename without suffix and without `.cheatsheet` if that's the last text before the suffix; e.g. a cheatsheet in the file `foo.cheatsheet.md` will have name `foo`.  However, if two cheat sheets with the same name are discovered in different paths, each one's shortest distinct path prefix (with respect to the others of the same name) is added to the name; e.g. if we have `foo/bar/baz.cheatsheet.md` and `foo/gar/baz.cheatsheet.md` their names will be `bar/baz` and `gar/baz` respectively.  If names still clash even after such a transformation (e.g. if you have `foo/bar/baz.cheetsheet.md` and `foo/bar/baz.cheatsheet`) then `cheeto` will complain and exit.
 
 
 ### Show specified sheet:
@@ -67,7 +67,7 @@ N.b.: the **name** of each cheat sheet is its filename without suffix and withou
 cheeto show <sheet_name>
 ```
 
-This loads the sheet (specified using its _name_ - so no file suffix / `.cheatsheet` necessary) and writes its contents to the terminal; `cheeto` will render the sheet using `mdcat` if it thinks it's in markdown format (either because its filename ends in `.md` or its first line looks like a markdown level-1 header in `#` format — e.g. `# <blah`)
+This loads the sheet (specified using its name as shown by `cheeto ls`) and writes its contents to the terminal; `cheeto` will render the sheet using `mdcat` if it thinks it's in markdown format (either because its filename ends in `.md` or its first line looks like a markdown level-1 header in `#` format — e.g. `# <blah`)
 
 
 ## Background / inspiration
@@ -77,6 +77,7 @@ This is inspired by the [0b10/cheatsheet](https://github.com/0b10/cheatsheet) zs
 * I only needed a tool to list and display cheatsheets  — not one to _manage_ (add, edit, etc.)
 * I want to write my cheatsheets in markdown, and then I want them rendered in the terminal using e.g. [mdcat](https://github.com/swsnr/mdcat)...
   - ... and while I can pipe the output of that cheatsheet plguin to mdcat, the plugin strips all lines beginning with `#` as comments — so no markdown headings!
+* I want my cheatsheets to be spread across multiple folders, and identified by a particular filename pattern.
 * Finally, I wanted the "show cheatsheet" command to have tab completion listing the sheets.
 
 

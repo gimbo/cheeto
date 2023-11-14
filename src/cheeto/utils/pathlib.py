@@ -6,6 +6,10 @@ from typing import Protocol
 import platformdirs
 
 
+def common_path_prefix(paths: list[Path]) -> Path:
+    return Path(os.path.commonprefix(paths))
+
+
 def walk(path: Path):
     for child in path.iterdir():
         if child.is_dir():

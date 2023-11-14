@@ -164,8 +164,8 @@ def parse_args(args_raw: tuple[str, ...] = tuple(sys.argv[1:])):
     try:
         args.sheets = Sheets.at(args.data_path)
     except SheetNameClashError as ex:
-        first, second = ex.args
-        sys.stderr.write(f"Sheet name clash:\n  {first}\n  {second}\n")
+        name, first, second = ex.args
+        sys.stderr.write(f"Sheet name clash:\n  {name}\n  {first}\n  {second}\n")
         sys.exit(1)
 
     return args
