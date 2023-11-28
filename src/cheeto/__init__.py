@@ -2,4 +2,4 @@
 
 __author__ = """Andy Gimblett"""
 __email__ = "andy@barefootcode.com"
-__version__ = "1.1.1"
+__version__ = "1.2.0"
