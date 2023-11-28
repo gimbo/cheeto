@@ -67,7 +67,24 @@ N.b.: in general the **name** of each cheat sheet is its filename without suffix
 cheeto show <sheet_name>
 ```
 
-This loads the sheet (specified using its name as shown by `cheeto ls`) and writes its contents to the terminal; `cheeto` will render the sheet using `mdcat` if it thinks it's in markdown format (either because its filename ends in `.md` or its first line looks like a markdown level-1 header in `#` format — e.g. `# <blah`)
+This loads the sheet (specified using its name as shown by `cheeto ls`) and writes its contents to the terminal.
+
+#### Markdown sheets
+
+`cheeto` will try to determine if the sheet is in markdown format; it uses a simple heuristic: it's considered markdown if the sheet's filename ends in `.md` or if the sheet's first line looks like a markdown level-1 header in `#` format — e.g. `# <blah`.
+
+Then, the markdown is rendered using one of a number of available renderers, controlled using the `--markdown-renderer` / `-m` option; these may be extended (see below) but by default the options are:
+
+* `rich` — (the default) use the [`rich`](https://rich.readthedocs.io/en/stable) python package to render the markdown.
+* `null` — render the markdown as plain text.
+* `mdcat` — use the [`mdcat`](https://github.com/swsnr/mdcat) tool.
+* `glow` — use the [`glow`](https://github.com/swsnr/mdcat) tool (in dark mode).
+* `glowl` — use the [`glow`](https://github.com/swsnr/mdcat) tool (in light mode).
+
+The `mdcat` and `glow`/`glowl` options will only appear if those tools appear to be in the `$PATH`.
+
+This list may be extended without modifying this package's code, via python's entry points machinery: implement a subclass of the ABC `cheeto.utils.markdown.MarkdownRenderer` and register it with the `cheeto.utils.markdown.renderers` entry point.
+
 
 
 ## Background / inspiration

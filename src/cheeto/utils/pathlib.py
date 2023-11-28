@@ -90,3 +90,14 @@ user_config_path = xdg_platformdirs(platformdirs.user_config_path, "XDG_CONFIG_H
 user_cache_path = xdg_platformdirs(platformdirs.user_cache_path, "XDG_CACHE_HOME")
 user_state_path = xdg_platformdirs(platformdirs.user_state_path, "XDG_STATE_HOME")
 user_runtime_path = xdg_platformdirs(platformdirs.user_runtime_path, "XDG_RUNTIME_DIR")
+
+
+def is_executable(path: Path) -> bool:
+    """Is some path executable?"""
+    return path.exists() and path.is_file() and os.access(path, os.X_OK)
+
+
+def is_executable_in_path(name: str) -> bool:
+    """Does some name appear as an executable in $PATH?"""
+    candidates = [(Path(p) / name) for p in os.environ["PATH"].split(":")]
+    return any(is_executable(path) for path in candidates)

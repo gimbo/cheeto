@@ -7,14 +7,14 @@ from enum import Enum
 from pathlib import Path
 
 import humanize
-from rich import box, pretty, print, traceback
+from rich import box, pretty, print, reconfigure, traceback
 from rich.logging import RichHandler
 from rich.table import Table
 
 from cheeto.sheet import SheetName, SheetNameClashError, SheetNotFoundError
 from cheeto.sheets import Sheets
 from cheeto.utils.argparse import ArgumentParser, unpack_args
-from cheeto.utils.markdown import render_markdown
+from cheeto.utils.markdown import MarkdownRenderer
 
 
 logger = logging.getLogger(__name__)
@@ -23,6 +23,7 @@ traceback.install(show_locals=True)
 
 
 def main():
+    reconfigure(markup=False)
     args = parse_args()
     logging.basicConfig(
         level="DEBUG" if args.debug else "INFO",
@@ -91,7 +92,11 @@ def jsonify_sheets(sheets: Sheets) -> str:
 
 
 @unpack_args
-def cmd_show_sheet(data_path: Path, sheet_name: SheetName):
+def cmd_show_sheet(
+    data_path: Path,
+    sheet_name: SheetName,
+    markdown_renderer: MarkdownRenderer,
+):
     try:
         sheet = Sheets.named_sheet_at(sheet_name, data_path)
     except SheetNotFoundError:
@@ -100,7 +105,11 @@ def cmd_show_sheet(data_path: Path, sheet_name: SheetName):
     if not sheet.probably_markdown:
         print(sheet.text)
         return
-    sys.stdout.write(render_markdown(sheet.text))
+    rendered = markdown_renderer(sheet.text)
+    if isinstance(rendered, str):
+        sys.stdout.write(rendered)
+    else:
+        print(rendered)
 
 
 def parse_args(args_raw: tuple[str, ...] = tuple(sys.argv[1:])):
@@ -157,10 +166,28 @@ def parse_args(args_raw: tuple[str, ...] = tuple(sys.argv[1:])):
         aliases=["s", "show"],
         description="Show specified sheet",
     )
+    available_renderers = MarkdownRenderer.renderers()
+    renderer_helps = [
+        f"* {name}: {renderer.__doc__}"
+        for name, renderer in available_renderers.items()
+    ]
+    cmd_show_sheet_parser.add_argument(
+        "--markdown",
+        "-m",
+        choices=list(available_renderers),
+        default="rich",
+        dest="markdown_renderer_class",
+        help=(
+            "Renderer to use for displaying markdown sheets; choices:\n\n"
+            + "\n".join(renderer_helps)
+        ),
+    )
     cmd_show_sheet_parser.add_sheet_arg()
     cmd_show_sheet_parser.set_defaults(func=cmd_show_sheet)
 
     args = parser.parse_args(args_raw)
+    args.markdown_renderer = dict(available_renderers)[args.markdown_renderer_class]
+
     try:
         args.sheets = Sheets.at(args.data_path)
     except SheetNameClashError as ex:
