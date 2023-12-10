@@ -3,6 +3,7 @@
 import json
 import logging
 import sys
+from contextlib import suppress
 from enum import Enum
 from pathlib import Path
 
@@ -186,7 +187,9 @@ def parse_args(args_raw: tuple[str, ...] = tuple(sys.argv[1:])):
     cmd_show_sheet_parser.set_defaults(func=cmd_show_sheet)
 
     args = parser.parse_args(args_raw)
-    args.markdown_renderer = dict(available_renderers)[args.markdown_renderer_class]
+    # If a markdown renderer was specified, use it.
+    with suppress(AttributeError):
+        args.markdown_renderer = dict(available_renderers)[args.markdown_renderer_class]
 
     try:
         args.sheets = Sheets.at(args.data_path)
