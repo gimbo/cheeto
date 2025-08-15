@@ -5,7 +5,7 @@ build-backend = "uv_build"
 
 [project]
 name = "cheeto"
-version = "2.0.0"
+version = "2.1.0"
 description = "Cheat sheet utility"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -65,7 +65,7 @@ documentation = "https://github.com/gimbo/cheeto"
 
 
 [tool.bumpversion]
-current_version = "2.0.0"
+current_version = "2.1.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
