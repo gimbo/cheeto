@@ -7,8 +7,9 @@ from importlib.metadata import entry_points
 from pathlib import Path
 
 from rich import get_console
-from rich.console import RenderableType
-from rich.markdown import Markdown
+from rich.console import RenderableType, Console, ConsoleOptions, RenderResult
+from rich.markdown import Markdown, Heading
+from rich.text import Text
 
 from .pathlib import is_executable, is_executable_in_path
 
@@ -42,11 +43,36 @@ class NullRenderer(MarkdownRenderer):
         return src
 
 
+class MyMarkdown(Markdown):
+    """Custom rich.Markdown
+
+    I didn't love how rich.markdown rendered headers as centred by default, but
+    it turns out [1] it's easy to override.
+
+    [1] https://github.com/Textualize/rich/issues/2137
+    """
+
+    class _MyHeading(Heading):
+        """Custom rich.Heading for left-aligned headers."""
+
+        def __rich_console__(
+            self,
+            console: Console,
+            options: ConsoleOptions,
+        ) -> RenderResult:
+            depth = int(self.tag.lstrip("h"))
+            if depth == 2:
+                yield Text("")
+            yield Text.assemble("#" * depth, " ", self.text, style="green4")
+
+    elements = Markdown.elements | {"heading_open": _MyHeading}
+
+
 class RichRenderer(MarkdownRenderer):
     """Render markdown using rich.Markdown; this is the default."""
 
     def __call__(self, src: str) -> RenderableType:
-        return Markdown(src)
+        return MyMarkdown(src)
 
 
 class ExternalMarkdownRenderer(MarkdownRenderer, ABC):
