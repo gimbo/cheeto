@@ -6,6 +6,20 @@ This is `cheeto`, a simple cheat sheet utility (written in python) which looks i
 
 ## Installation
 
+[uv](https://docs.astral.sh/uv/) rules the roost! Either:
+
+```
+uv tool install git+https://github.com/gimbo/cheeto
+```
+
+or to just run it once:
+
+```
+uvx --from git+https://github.com/gimbo/cheeto cheeto
+```
+
+### No `uv`?
+
 [pipx](https://github.com/pypa/pipx) is recommended:
 
 ```shell
