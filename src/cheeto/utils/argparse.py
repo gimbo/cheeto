@@ -10,8 +10,8 @@ from typing import cast
 
 from argparse_formatter import FlexiFormatter
 
-from cheeto import __version__
 from cheeto.sheet import SheetName
+from cheeto.utils.project_info import ProjectInfo
 
 from .pathlib import twiddles, user_data_path
 
@@ -143,7 +143,8 @@ class ArgumentParser(argparse.ArgumentParser):
                 )
 
             def __call__(self, *args, **kwargs):
-                sys.stdout.write(f"{__package__.split('.')[0]} version {__version__}\n")
+                version = ProjectInfo().project_package_version
+                sys.stdout.write(f"{__package__.split('.')[0]} version {version}\n")
                 sys.exit(0)
 
         self.add_argument(

@@ -9,16 +9,14 @@ from cheeto.utils.pathlib import twiddles, walk
 SheetName = NewType("SheetName", str)
 
 
-class SheetError(CheetoError):
-    ...
+class SheetError(CheetoError): ...
 
 
 class SheetNameClashError(SheetError):
     """Found multiple sheets with same name (e.g. files `foo` and `foo.md`)."""
 
 
-class SheetNotFoundError(SheetError):
-    ...
+class SheetNotFoundError(SheetError): ...
 
 
 class Sheet(NamedTuple):

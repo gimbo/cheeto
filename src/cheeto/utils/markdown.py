@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 
 class MarkdownRenderer(ABC):
     @abstractmethod
-    def __call__(self, src: str) -> RenderableType:
-        ...
+    def __call__(self, src: str) -> RenderableType: ...
 
     def __bool__(self) -> bool:
         """Is the renderer available?"""

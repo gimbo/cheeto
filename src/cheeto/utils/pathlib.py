@@ -58,15 +58,13 @@ def twiddles(path: Path):
 class PlatformDirsUserFn(Protocol):
     """Loose specification of the type of a platformdirs.user_*_path() function."""
 
-    def __call__(self, appname: str | None = None, *args, **kwargs) -> Path:
-        ...
+    def __call__(self, appname: str | None = None, *args, **kwargs) -> Path: ...
 
 
 class UserPathFn(Protocol):
     """The type of the wrapped functions we create below."""
 
-    def __call__(self, appname: str | None = None) -> Path:
-        ...
+    def __call__(self, appname: str | None = None) -> Path: ...
 
 
 # Functions which wrap platformdirs.*_path() but which honour XDG_* env vars if set.
