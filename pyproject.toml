@@ -54,6 +54,7 @@ cheeto = "cheeto.scripts.cheeto:main"
 [project.entry-points."cheeto.utils.markdown.renderers"]
 null = "cheeto.utils.markdown:NullRenderer"
 rich = "cheeto.utils.markdown:RichRenderer"
+leaf = "cheeto.utils.markdown:LeafRenderer"
 mdcat = "cheeto.utils.markdown:MdcatRenderer"
 glow = "cheeto.utils.markdown:GlowRenderer"
 glowl = "cheeto.utils.markdown:GlowLightRenderer"

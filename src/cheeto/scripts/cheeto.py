@@ -176,7 +176,7 @@ def parse_args(args_raw: tuple[str, ...] = tuple(sys.argv[1:])):
         "--markdown",
         "-m",
         choices=list(available_renderers),
-        default="rich",
+        default="leaf",
         dest="markdown_renderer_class",
         help=(
             "Renderer to use for displaying markdown sheets; choices:\n\n"

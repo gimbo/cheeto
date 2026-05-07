@@ -89,13 +89,16 @@ This loads the sheet (specified using its name as shown by `cheeto ls`) and writ
 
 Then, the markdown is rendered using one of a number of available renderers, controlled using the `--markdown-renderer` / `-m` option; these may be extended (see below) but by default the options are:
 
-* `rich` — (the default) use the [`rich`](https://rich.readthedocs.io/en/stable) python package to render the markdown.
+* `leaf` — (the default) use the `leaf` tool to render the markdown.
+* `rich` — use the [`rich`](https://rich.readthedocs.io/en/stable) python package to render the markdown.
 * `null` — render the markdown as plain text.
 * `mdcat` — use the [`mdcat`](https://github.com/swsnr/mdcat) tool.
 * `glow` — use the [`glow`](https://github.com/swsnr/mdcat) tool (in dark mode).
 * `glowl` — use the [`glow`](https://github.com/swsnr/mdcat) tool (in light mode).
 
-The `mdcat` and `glow`/`glowl` options will only appear if those tools appear to be in the `$PATH`.
+The `leaf`, `mdcat`, and `glow`/`glowl` options will only appear if those tools appear to be in the `$PATH`.
+
+Note that because `leaf` is the default renderer, `cheeto show-sheet` will only work out of the box if `leaf` is installed — otherwise pass `-m <renderer>` explicitly.
 
 This list may be extended without modifying this package's code, via python's entry points machinery: implement a subclass of the ABC `cheeto.utils.markdown.MarkdownRenderer` and register it with the `cheeto.utils.markdown.renderers` entry point.
 

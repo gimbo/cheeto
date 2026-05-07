@@ -69,7 +69,7 @@ class MyMarkdown(Markdown):
 
 
 class RichRenderer(MarkdownRenderer):
-    """Render markdown using rich.Markdown; this is the default."""
+    """Render markdown using rich.Markdown."""
 
     def __call__(self, src: str) -> RenderableType:
         return MyMarkdown(src)
@@ -95,6 +95,25 @@ class MdcatRenderer(ExternalMarkdownRenderer):
 
     def __call__(self, src: str) -> RenderableType:
         cmd = ["mdcat", "-"]
+        logger.debug(cmd)
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            check=True,
+            encoding="utf-8",
+            input=src,
+        )
+        return proc.stdout
+
+
+class LeafRenderer(ExternalMarkdownRenderer):
+    """Render markdown using the leaf tool if available (default)."""
+
+    def __init__(self, executable: Path | None = None):
+        super().__init__(executable if executable is not None else "leaf")
+
+    def __call__(self, src: str) -> RenderableType:
+        cmd = ["leaf", "--render", "--ansi"]
         logger.debug(cmd)
         proc = subprocess.run(
             cmd,
