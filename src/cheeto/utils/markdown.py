@@ -113,7 +113,7 @@ class LeafRenderer(ExternalMarkdownRenderer):
         super().__init__(executable if executable is not None else "leaf")
 
     def __call__(self, src: str) -> RenderableType:
-        cmd = ["leaf", "--render", "--ansi"]
+        cmd = ["leaf", "--inline", "ansi"]
         logger.debug(cmd)
         proc = subprocess.run(
             cmd,
